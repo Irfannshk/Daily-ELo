@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elo Task Tracker</title>
+  <style>
+    :root {
+      --easy: #4CAF50;
+      --medium: #FFC107;
+      --hard: #F44336;
+    }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f5f5f5;
+    }
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .elo-display {
+      background: white;
+      padding: 10px 20px;
+      border-radius: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      font-weight: bold;
+    }
+    .task-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    input, select, button {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+    button {
+      background: #2196F3;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    .task {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .task.completed {
+      opacity: 0.7;
+    }
+    .difficulty-easy { border-left: 4px solid var(--easy); }
+    .difficulty-medium { border-left: 4px solid var(--medium); }
+    .difficulty-hard { border-left: 4px solid var(--hard); }
+    button.complete {
+      background: var(--easy);
+    }
+    .completed-badge {
+      color: var(--easy);
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Task Tracker</h1>
+    <div class="elo-display">
+      ELO: <span id="eloScore">1200</span>
+    </div>
+  </div>
+
+  <div class="task-form">
+    <input type="text" id="taskInput" placeholder="New task">
+    <select id="difficultySelect">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <button onclick="addTask()">Add Task</button>
+  </div>
+
+  <div id="taskList"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

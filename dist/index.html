@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elo Task Tracker</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .task-card {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 15px;
+      margin: 10px 0;
+      display: flex;
+      justify-content: space-between;
+    }
+    .task-actions button {
+      margin-left: 8px;
+    }
+    .easy { border-left: 5px solid #4CAF50; }
+    .medium { border-left: 5px solid #FFC107; }
+    .hard { border-left: 5px solid #F44336; }
+  </style>
+</head>
+<body>
+  <h1>My Tasks</h1>
+  
+  <!-- Task Input Form -->
+  <div class="task-form">
+    <input type="text" id="taskInput" placeholder="New task">
+    <select id="difficultySelect">
+      <option value="easy">Easy</option>
+      <option value="medium">Medium</option>
+      <option value="hard">Hard</option>
+    </select>
+    <button onclick="addTask()">Add Task</button>
+  </div>
+
+  <!-- Task List Container -->
+  <div id="task-list"></div>
+
+  <script>
+    // Load tasks when page opens
+    fetchTasks();
+
+    // Fetch and display tasks
+    function fetchTasks() {
+      fetch('http://localhost:3001/api/tasks')
+        .then(res => res.json())
+        .then(tasks => {
+          document.getElementById('task-list').innerHTML = tasks
+            .map(task => `
+              <div class="task-card ${task.difficulty}">
+                <div>
+                  <strong>${task.name}</strong>
+                  <span>(${task.difficulty})</span>
+                </div>
+                <div class="task-actions">
+                  <button onclick="completeTask('${task._id}')">✓</button>
+                  <button onclick="deleteTask('${task._id}')">✕</button>
+                </div>
+              </div>
+            `)
+            .join('');
+        });
+    }
+
+    // Add new task
+    function addTask() {
+      const task = {
+        name: document.getElementById('taskInput').value,
+        difficulty: document.getElementById('difficultySelect').value
+      };
+
+      fetch('http://localhost:3001/api/tasks', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(task)
+      })
+      .then(() => {
+        document.getElementById('taskInput').value = '';
+        fetchTasks(); // Refresh the list
+      });
+    }
+
+    // Complete task (will add ELO later)
+    function completeTask(id) {
+      console.log("Task completed:", id);
+      // Add ELO update logic here
+    }
+
+    // Delete task
+    function deleteTask(id) {
+      fetch(`http://localhost:3001/api/tasks/${id}`, {
+        method: 'DELETE'
+      })
+      .then(() => fetchTasks());
+    }
+  </script>
+</body>
+</html>
